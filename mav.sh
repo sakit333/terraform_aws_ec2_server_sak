@@ -18,7 +18,7 @@ echo -e "${CYAN}${BOLD}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "                 Apache Maven Installer  v3.9.11"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo -e "${GREEN}           scripted by sak_shetty — DevOps Engineer${RESET}"
+echo -e "${GREEN}     scripted by sak_shetty — DevOps Engineer${RESET}"
 echo
 
 # ────────────────────────────────────────────────────────────────────
