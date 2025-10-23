@@ -1,6 +1,27 @@
 #!/bin/bash
 # Apache Tomcat Installer Script
 # Modified by Ghost-ak (sak_shetty) — DevOps Engineer
+
+# ─────────────────────────────────────────
+# Constants and Colors
+GREEN="\e[32m"
+CYAN="\e[36m"
+YELLOW="\e[33m"
+RED="\e[31m"
+BOLD="\e[1m"
+RESET="\e[0m"
+
+# ────────────────────────────────────────────────────────────────────
+# Professional Header
+clear
+echo -e "${CYAN}${BOLD}"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "                 Apache Tomcat Installer  v9.0.111"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo -e "${GREEN}            scripted by @sak_shetty — DevOps Engineer${RESET}"
+echo
+
+
 set -euo pipefail
 
 TOMCAT_VERSION="9.0.111"
@@ -13,13 +34,13 @@ BACKUP_DIR="/root/tomcat-backups/$TS"
 mkdir -p "$BACKUP_DIR"
 
 if [[ $EUID -ne 0 ]]; then
-  echo "Run as root (sudo). Exiting."
+  echo -e "${RED} Run as root (sudo). Exiting."
   exit 1
 fi
 
 # 1) Check Java 17
 if ! command -v java >/dev/null 2>&1; then
-  echo "ERROR: java not found. Install Java 17 and re-run. Exiting."
+  echo -e "${RED} ERROR: java not found. Install Java 17 and re-run. Exiting."
   exit 2
 fi
 JAVA_V="$(java -version 2>&1 | tr '\n' ' ')"
@@ -28,7 +49,7 @@ if ! echo "$JAVA_V" | grep -qE '(^| )[0-9]*"?17|openjdk version "17'; then
   echo "Install Java 17 and re-run. Exiting."
   exit 3
 fi
-echo "Java 17 detected: $JAVA_V"
+echo -e "{GREEN} Java 17 detected: $JAVA_V"
 
 # 1.5) Auto-download Tomcat if missing
 if [[ ! -d "$TOMCAT_DIR" ]]; then
@@ -40,7 +61,7 @@ if [[ ! -d "$TOMCAT_DIR" ]]; then
   rm -f "$TOMCAT_ARCHIVE"
   echo "Tomcat extracted to: $TOMCAT_DIR"
 else
-  echo "Tomcat directory found: $TOMCAT_DIR"
+  echo -e "{GREEN} Tomcat directory found: $TOMCAT_DIR"
 fi
 
 # Files
@@ -66,9 +87,9 @@ backup() {
 # 2) Ensure roles + admin user (idempotent)
 backup "$USERS_FILE"
 if grep -q 'rolename="manager-gui"' "$USERS_FILE" && grep -q 'username="admin"' "$USERS_FILE"; then
-  echo "tomcat-users.xml already has manager roles and admin user. Skipping."
+  echo -e "{GREEN} tomcat-users.xml already has manager roles and admin user. Skipping."
 else
-  echo "Adding manager roles and admin user to $USERS_FILE"
+  echo -e "{CYAN} Adding manager roles and admin user to $USERS_FILE"
   # append just before closing tag
   awk '
   /<\/tomcat-users>/ && !added {
@@ -86,7 +107,7 @@ fi
 
 # 3) Comment CookieProcessor...Valve block in context.xml (idempotent)
 if [[ ! -f "$CONTEXT_FILE" ]]; then
-  echo "Warning: context.xml not found at $CONTEXT_FILE. Skipping context change."
+  echo -e "{YELLOW} Warning: context.xml not found at $CONTEXT_FILE. Skipping context change."
 else
   backup "$CONTEXT_FILE"
   # If CookieProcessor already inside <!-- --> skip
@@ -133,5 +154,13 @@ else
   echo "Startup script not found or not executable: $STARTUP. Skipping start."
 fi
 
-echo "Done. Backups are in $BACKUP_DIR"
-echo "👻 Executed by Ghost-ak (sak_shetty) — DevOps Engineer"
+echo -e "${GREEN}✔ Done. Backups are in $BACKUP_DIR"
+echo -e "${GREEN}✔ Executed by Ghost-ak (sak_shetty) — DevOps Engineer"
+
+
+# ────────────────────────────────────────────────────────────────────
+# Done
+echo
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+echo -e "${CYAN}          Installation completed — scripted by @sak_shetty${RESET}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
