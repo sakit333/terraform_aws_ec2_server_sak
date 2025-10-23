@@ -5,6 +5,14 @@
 # Exit on error
 set -e
 
+echo "=========================================================="
+echo "Author : Akshay Kumar (@sak_shetty)"
+echo "Role   : DevOps Engineer"
+echo "Purpose: Automate MySQL installation, configuration,"
+echo "             and remote access setup on Ubuntu systems."
+echo "=========================================================="
+echo ""
+
 # Variables
 MYSQL_ROOT_PASSWORD="1234"
 MYSQL_CONF="/etc/mysql/mysql.conf.d/mysqld.cnf"
@@ -48,3 +56,8 @@ sudo systemctl status mysql --no-pager
 echo "🎉 MySQL installation and configuration complete!"
 echo "✅ Root password: ${MYSQL_ROOT_PASSWORD}"
 echo "✅ Remote access enabled (bind-address = 0.0.0.0)"
+
+echo "=========================================================="
+echo "✅ Script executed successfully by @sak_shetty"
+echo "🕒 Execution Time: $(date)"
+echo "=========================================================="
