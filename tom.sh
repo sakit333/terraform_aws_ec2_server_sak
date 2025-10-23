@@ -1,9 +1,12 @@
-#!/usr/bin/env bash
-# simple_tomcat_fix.sh
-# Usage: sudo ./simple_tomcat_fix.sh [TOMCAT_DIR]
-set -euo pipefail
+#!/bin/bash
+# Apache Tomcat Installer Script
+# scripted by @sak_shetty — DevOps Engineer
 
-TOMCAT_DIR="${1:-./apache-tomcat-9.0.111}"
+TOMCAT_VERSION="9.0.111"
+TOMCAT_ARCHIVE="apache-tomcat-${TOMCAT_VERSION}.tar.gz"
+TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/${TOMCAT_ARCHIVE}"
+
+TOMCAT_DIR="${1:-./apache-tomcat-${TOMCAT_VERSION}}"
 TS="$(date +%Y%m%d_%H%M%S)"
 BACKUP_DIR="/root/tomcat-backups/$TS"
 mkdir -p "$BACKUP_DIR"
@@ -25,6 +28,19 @@ if ! echo "$JAVA_V" | grep -qE '(^| )[0-9]*"?17|openjdk version "17'; then
   exit 3
 fi
 echo "Java 17 detected: $JAVA_V"
+
+# 1.5) Auto-download Tomcat if missing
+if [[ ! -d "$TOMCAT_DIR" ]]; then
+  echo "Tomcat directory not found: $TOMCAT_DIR"
+  echo "Downloading Apache Tomcat ${TOMCAT_VERSION}..."
+  wget -q "$TOMCAT_URL" -O "$TOMCAT_ARCHIVE"
+  echo "Extracting Tomcat..."
+  tar -xzf "$TOMCAT_ARCHIVE"
+  rm -f "$TOMCAT_ARCHIVE"
+  echo "Tomcat extracted to: $TOMCAT_DIR"
+else
+  echo "Tomcat directory found: $TOMCAT_DIR"
+fi
 
 # Files
 USERS_FILE="${TOMCAT_DIR}/conf/tomcat-users.xml"
@@ -117,3 +133,4 @@ else
 fi
 
 echo "Done. Backups are in $BACKUP_DIR"
+echo "👻 Executed by Ghost-ak (sak_shetty) — DevOps OpsMage"
