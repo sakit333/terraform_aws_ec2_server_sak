@@ -61,7 +61,7 @@ if [[ ! -d "$TOMCAT_DIR" ]]; then
   rm -f "$TOMCAT_ARCHIVE"
   echo "Tomcat extracted to: $TOMCAT_DIR"
 else
-  echo -e "{GREEN} Tomcat directory found: $TOMCAT_DIR"
+  echo -e "{GREEN}✔ Tomcat directory found: $TOMCAT_DIR"
 fi
 
 # Files
@@ -87,7 +87,7 @@ backup() {
 # 2) Ensure roles + admin user (idempotent)
 backup "$USERS_FILE"
 if grep -q 'rolename="manager-gui"' "$USERS_FILE" && grep -q 'username="admin"' "$USERS_FILE"; then
-  echo -e "{GREEN} tomcat-users.xml already has manager roles and admin user. Skipping."
+  echo -e "{GREEN}✔ tomcat-users.xml already has manager roles and admin user. Skipping."
 else
   echo -e "{CYAN} Adding manager roles and admin user to $USERS_FILE"
   # append just before closing tag
@@ -107,7 +107,7 @@ fi
 
 # 3) Comment CookieProcessor...Valve block in context.xml (idempotent)
 if [[ ! -f "$CONTEXT_FILE" ]]; then
-  echo -e "{YELLOW} Warning: context.xml not found at $CONTEXT_FILE. Skipping context change."
+  echo -e "{YELLOW}• Warning: context.xml not found at $CONTEXT_FILE. Skipping context change."
 else
   backup "$CONTEXT_FILE"
   # If CookieProcessor already inside <!-- --> skip
