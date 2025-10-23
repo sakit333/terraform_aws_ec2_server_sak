@@ -1,6 +1,7 @@
 #!/bin/bash
 # Apache Tomcat Installer Script
-# scripted by @sak_shetty — DevOps Engineer
+# Modified by Ghost-ak (sak_shetty) — DevOps Engineer
+set -euo pipefail
 
 TOMCAT_VERSION="9.0.111"
 TOMCAT_ARCHIVE="apache-tomcat-${TOMCAT_VERSION}.tar.gz"
@@ -133,4 +134,4 @@ else
 fi
 
 echo "Done. Backups are in $BACKUP_DIR"
-echo "👻 Executed by Ghost-ak (sak_shetty) — DevOps OpsMage"
+echo "👻 Executed by Ghost-ak (sak_shetty) — DevOps Engineer"
